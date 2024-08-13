@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/ahmed-afzal1/go-auth/config"
 	"github.com/ahmed-afzal1/go-auth/models"
 	"github.com/ahmed-afzal1/go-auth/services"
 	"github.com/gin-gonic/gin"
@@ -37,4 +38,18 @@ func SignUp(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, newUser)
+}
+
+func UserDetails(c *gin.Context) {
+	var user models.User
+	email, _ := c.Get("email")
+
+	result := config.DB.Select("first_name", "last_name", "email", "phone").Where("email = ?", email).First(&user)
+
+	if result.Error != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }
