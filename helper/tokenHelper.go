@@ -13,12 +13,12 @@ type SignedDetails struct {
 	Email      string
 	First_name string
 	Last_name  string
-	Uid        string
+	Uid        uint
 	User_type  string
 	jwt.RegisteredClaims
 }
 
-func GenerateAllTokens(email string, firstName string, lastName string, userType string, uid string) (signedToken string, signedRefreshToken string, err error) {
+func GenerateAllTokens(email string, firstName string, lastName string, userType string, uid uint) (signedToken string, signedRefreshToken string, err error) {
 	claims := &SignedDetails{
 		Email:      email,
 		First_name: firstName,
