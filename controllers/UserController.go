@@ -44,7 +44,7 @@ func UserDetails(c *gin.Context) {
 	var user models.User
 	email, _ := c.Get("email")
 
-	result := config.DB.Select("first_name", "last_name", "email", "phone").Where("email = ?", email).First(&user)
+	result := config.DB.Preload("Posts").Where("email = ?", email).First(&user)
 
 	if result.Error != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})

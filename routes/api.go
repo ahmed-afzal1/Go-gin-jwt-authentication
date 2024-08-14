@@ -15,4 +15,13 @@ func RegisterRoutes(r *gin.Engine) {
 	{
 		userRoute.GET("details", controllers.UserDetails)
 	}
+
+	postRoute := r.Group("/posts")
+
+	postRoute.Use(middleware.Authenticate)
+	{
+		postRoute.GET("index", controllers.GetAllPost)
+		postRoute.POST("create", controllers.CreatePost)
+		postRoute.GET("/:id", controllers.FindPost)
+	}
 }
