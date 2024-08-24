@@ -24,4 +24,12 @@ func RegisterRoutes(r *gin.Engine) {
 		postRoute.POST("create", controllers.CreatePost)
 		postRoute.GET("/:id", controllers.FindPost)
 	}
+
+	categoryRoute := r.Group("/category")
+
+	categoryRoute.Use(middleware.Authenticate)
+	{
+		categoryRoute.GET("/index", controllers.GetAllCategories)
+		categoryRoute.POST("/create", controllers.CreateCategory)
+	}
 }
