@@ -2,12 +2,14 @@ package controllers
 
 import (
 	"context"
-	"github.com/ahmed-afzal1/go-auth/models"
-	"github.com/ahmed-afzal1/go-auth/services"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/ahmed-afzal1/go-auth/config"
+	"github.com/ahmed-afzal1/go-auth/models"
+	"github.com/ahmed-afzal1/go-auth/services"
+	"github.com/gin-gonic/gin"
 )
 
 func GetAllPost(c *gin.Context) {
@@ -34,6 +36,7 @@ func CreatePost(c *gin.Context) {
 	}
 
 	var post models.Post
+	var category models.Category
 
 	var _, cancel = context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
@@ -43,11 +46,16 @@ func CreatePost(c *gin.Context) {
 		return
 	}
 
-	validationErr := validate.Struct(post)
-	if validationErr != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
+	if err := config.DB.First(&category, post.CategoryID).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Category not found!"})
 		return
 	}
+
+	// validationErr := validate.Struct(post)
+	// if validationErr != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": validationErr.Error()})
+	// 	return
+	// }
 
 	post.UserID = userIDUint
 
