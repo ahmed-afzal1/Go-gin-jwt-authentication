@@ -14,6 +14,16 @@ import (
 
 var validate = validator.New()
 
+// SignUp handles user signup requests
+// @Summary User signup
+// @Description Register a new user
+// @Tags auth
+// @Accept  json
+// @Produce  json
+// @Param user body CreateUserRequest true "Signup Request"
+// @Success 200 {object} CreateUserRequest
+// @Failure 400 {object} gin.H{"error": "Invalid request"}
+// @Router /signup [post]
 func SignUp(c *gin.Context) {
 	var user models.User
 

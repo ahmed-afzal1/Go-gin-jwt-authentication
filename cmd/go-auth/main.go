@@ -2,9 +2,12 @@ package main
 
 import (
 	"github.com/ahmed-afzal1/go-auth/config"
+	_ "github.com/ahmed-afzal1/go-auth/docs"
 	"github.com/ahmed-afzal1/go-auth/routes"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/swaggo/files"
+	"github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -18,6 +21,8 @@ func main() {
 	r.Use(gin.Logger())
 
 	config.ConnectDatabase()
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	routes.RegisterRoutes(r)
 
 	r.Run()
